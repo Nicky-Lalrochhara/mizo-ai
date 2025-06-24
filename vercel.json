@@ -7,6 +7,6 @@
     }
   ],
   "env": {
-    "OPENAI_API_KEY": "@openai_api_key"
+    "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": "@openai_api_key"
   }
 }
