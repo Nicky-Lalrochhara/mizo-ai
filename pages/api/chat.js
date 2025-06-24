@@ -9,6 +9,12 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // ✅ Check if API key is present
+  if (!process.env.OPENAI_API_KEY) {
+    console.error("❌ Missing OPENAI_API_KEY in environment variables.");
+    return res.status(500).json({ error: "Server misconfiguration: API key not found" });
+  }
+
   const { message } = req.body;
 
   try {
@@ -28,10 +34,10 @@ export default async function handler(req, res) {
       max_tokens: 500,
     });
 
-    const reply = response.choices[0]?.message?.content || "Ka hre lo. Hmalamah hman leh rawh.";
+    const reply = response.choices?.[0]?.message?.content || "Ka hre lo. Hmalamah hman leh rawh.";
     res.status(200).json({ reply });
   } catch (error) {
-    console.error('OpenAI API error:', error);
+    console.error('❌ OpenAI API Error:', error?.response?.data || error.message || error);
     res.status(500).json({ error: "Hmanlai ah harsatna a awm e. Hmalamah hman leh rawh." });
   }
 }
